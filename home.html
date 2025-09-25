@@ -140,25 +140,7 @@
     </div>
   </div>
 
-  <!-- CountAPI Tracking -->
-  <script>
-    const clickCounter = document.getElementById('clickCount');
-
-    // Get current count on page load
-    fetch('https://api.countapi.xyz/get/mla-site/whatsapp-btn')
-      .then(res => res.json())
-      .then(data => clickCounter.textContent = 'Clicks: ' + data.value)
-      .catch(err => console.error(err));
-
-    // Increment counter on button click
-    document.getElementById('whatsappButton').addEventListener('click', function() {
-      fetch('https://api.countapi.xyz/hit/mla-site/whatsapp-btn')
-        .then(res => res.json())
-        .then(data => {
-          clickCounter.textContent = 'Clicks: ' + data.value;
-        })
-        .catch(err => console.error(err));
-    });
+ 
   </script>
 
 </body>
