@@ -126,9 +126,9 @@
     <!-- Card Section -->
     <div class="card-section">
       <h1>Arimilli Radhakrishna</h1>
-      <p class="designation">MLA, tanuku</p>
+      <p class="designation">MLA, Tanuku</p>
       <p class="description">
-        మన తణుకు, మన ఆరిమిల్లి నియోజకవర్గం శాసనసభ సభ్యులు‎  యొక్క‎ రోజువారీ‎ కార్యక్రమాల‎ వివరాల‎ కొరకు ఈ‎ చానెల్ని‎ ఫాలో‎ అవ్వండి‎ 
+        మన తణుకు, మన ఆరిమిల్లి నియోజకవర్గం శాసనసభ సభ్యులు‎ యొక్క‎ రోజువారీ‎ కార్యక్రమాల‎ వివరాల‎ కొరకు ఈ‎ చానెల్ని‎ ఫాలో‎ అవ్వండి‎ 
       </p>
       <a href="https://whatsapp.com/channel/0029VbAyyeSEFeXmPKE2Kd0L" 
          target="_blank" 
@@ -136,11 +136,46 @@
          id="whatsappButton">
         WhatsApp
       </a>
-      
+      <span id="clickCount">Clicks: 0</span>
     </div>
   </div>
 
- 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
+
+  <script>
+    // 🔹 Replace with your Firebase config from Project Settings → Web App
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "mla-site.firebaseapp.com",
+      databaseURL: "https://mla-site-default-rtdb.firebaseio.com",
+      projectId: "mla-site",
+      storageBucket: "mla-site.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const clickCounter = document.getElementById('clickCount');
+    const whatsappButton = document.getElementById('whatsappButton');
+    const counterRef = db.ref('whatsapp-btn'); // Firebase DB path
+
+    // Get current count and update in real-time
+    counterRef.on('value', (snapshot) => {
+      const count = snapshot.val() || 0;
+      clickCounter.textContent = 'Clicks: ' + count;
+    });
+
+    // Increment counter on button click
+    whatsappButton.addEventListener('click', () => {
+      counterRef.transaction((current) => {
+        return (current || 0) + 1;
+      });
+    });
   </script>
 
 </body>
