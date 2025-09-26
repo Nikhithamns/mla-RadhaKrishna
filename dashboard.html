@@ -77,9 +77,7 @@
           <th>IP (hashed)</th>
         </tr>
       </thead>
-      <tbody id="logsTable">
-        <!-- Logs will appear here -->
-      </tbody>
+      <tbody id="logsTable"></tbody>
     </table>
 
     <a href="home.html" class="back-btn">Back to Home</a>
@@ -90,28 +88,19 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
 
   <script>
-    // Firebase config
+    // Initialize Firebase
     const firebaseConfig = {
       databaseURL: "https://mla-site-default-rtdb.asia-southeast1.firebasedatabase.app"
     };
-
-    // Initialize Firebase
     const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
     const totalClicksEl = document.getElementById('totalClicks');
     const logsTable = document.getElementById('logsTable');
 
-    const clicksRef = db.ref('mla-RadhaKrishna/whatsapp-btn');
-    const logsRef = db.ref('mla-RadhaKrishna/clickLogs');
+    const logsRef = db.ref('clickLogs');
 
-    // Update total clicks
-    clicksRef.on('value', snapshot => {
-      const total = snapshot.val() || 0;
-      totalClicksEl.textContent = total;
-    });
-
-    // Helper to flatten nested logs
+    // Function to flatten nested logs
     function flattenLogs(obj) {
       let result = [];
       for (const key in obj) {
@@ -124,15 +113,16 @@
       return result;
     }
 
-    // Display logs
+    // Update logs and total clicks
     logsRef.on('value', snapshot => {
       logsTable.innerHTML = '';
       const data = snapshot.val();
       if (!data) return;
 
       const logsArray = flattenLogs(data)
-        .sort((a,b) => b.ts - a.ts)  // newest first
-        .slice(0, 50); // show latest 50 clicks
+        .sort((a,b) => b.ts - a.ts);  // newest first
+
+      totalClicksEl.textContent = logsArray.length;
 
       logsArray.forEach(log => {
         const tr = document.createElement('tr');
