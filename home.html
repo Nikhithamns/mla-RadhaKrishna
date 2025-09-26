@@ -103,12 +103,12 @@
     </div>
   </div>
 
-  <!-- Firebase SDKs (compat version for static HTML) -->
+  <!-- Firebase SDKs (compat for GitHub Pages) -->
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
 
   <script>
-    // Your Firebase config
+    // 🔹 Your Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyAb_RH-NXtAAtIl7NKOXQzsNI1DsnNh9kc",
       authDomain: "mla-site.firebaseapp.com",
@@ -124,18 +124,47 @@
     const db = firebase.database();
 
     const counterRef = db.ref("whatsapp-btn");
+    const logsRef = db.ref("clickLogs");
     const clickCounter = document.getElementById("clickCount");
     const whatsappButton = document.getElementById("whatsappButton");
 
-    // Show current clicks
+    // Display counter in real-time
     counterRef.on("value", snapshot => {
-      const count = snapshot.val() || 0;
-      clickCounter.textContent = "Clicks: " + count;
+      clickCounter.textContent = "Clicks: " + (snapshot.val() || 0);
     });
 
-    // Increment on click
-    whatsappButton.addEventListener("click", () => {
+    // Hash function for IP (SHA-256)
+    async function hashIP(ip) {
+      const enc = new TextEncoder();
+      const data = enc.encode(ip);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(hashBuffer))
+        .map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+
+    // On button click
+    whatsappButton.addEventListener("click", async () => {
+      // 1) Increment counter
       counterRef.transaction(current => (current || 0) + 1);
+
+      // 2) Fetch public IP
+      let ip = "unknown";
+      try {
+        const res = await fetch("https://api.ipify.org?format=json");
+        const json = await res.json();
+        ip = await hashIP(json.ip); // store hashed IP
+      } catch (e) {
+        console.warn("IP fetch failed:", e);
+      }
+
+      // 3) Log details
+      const logEntry = {
+        ip,
+        ua: navigator.userAgent,
+        ts: Date.now(),
+        path: location.pathname
+      };
+      logsRef.push(logEntry).catch(console.error);
     });
   </script>
 
