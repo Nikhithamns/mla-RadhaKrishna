@@ -1,165 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Connect on WhatsApp</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connect on WhatsApp</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body, html { height: 100%; font-family: Arial; background:#f5f5f5; display:flex; justify-content:center; align-items:center; flex-direction:column; }
+  
+  .container { display:flex; flex-direction:column; width:90%; max-width:1000px; gap:20px; }
 
-    body, html {
-      height: 100%;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
+  /* Video section - YouTube style 16:9 */
+  .video-section { position: relative; width:100%; padding-bottom:56.25%; overflow:hidden; border-radius:15px; box-shadow:0 4px 15px rgba(0,0,0,0.2); }
+  .video-section video { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; }
 
-    .container {
-      display: flex;
-      flex-direction: column;
-      width: 90%;
-      max-width: 1000px;
-      gap: 20px;
-    }
+  /* Card below video */
+  .card-section { background:rgba(255,255,255,0.95); border-radius:20px; padding:20px 30px; box-shadow:0 4px 15px rgba(0,0,0,0.2); text-align:center; }
+  .card-section h1 { font-size:28px; margin-bottom:10px; font-weight:bold; }
+  .card-section p { font-size:16px; color:#333; margin-bottom:15px; }
+  .whatsapp-btn { display:inline-block; padding:14px 30px; font-size:18px; font-weight:bold; color:white; background-color:#25D366; border-radius:10px; text-decoration:none; transition:0.3s; }
+  .whatsapp-btn:hover { background-color:#128C7E; transform:scale(1.05); }
 
-    /* YouTube-style 16:9 Video */
-    .video-section {
-      position: relative;
-      width: 100%;
-      padding-bottom: 56.25%; /* 16:9 aspect ratio */
-      overflow: hidden;
-      border-radius: 15px;
-      box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
-    }
+  #clickCount { display:block; margin-top:10px; font-weight:bold; color:#333; }
 
-    .video-section video {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    .card-section {
-      background: rgba(255, 255, 255, 0.95);
-      flex-direction: column;
-      border-radius: 20px;
-      padding: 20px 30px;
-      box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
-      text-align: center;
-    }
-
-    .card-section h1 {
-      font-size: 28px;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-
-    .card-section p.designation {
-      font-size: 18px;
-      color: #666;
-      margin-bottom: 10px;
-    }
-
-    .card-section p.description {
-      font-size: 16px;
-      color: #333;
-      margin-bottom: 15px;
-    }
-
-    .whatsapp-btn {
-      display: inline-block;
-      padding: 14px 30px;
-      font-size: 18px;
-      font-weight: bold;
-      color: white;
-      background-color: #25D366;
-      border-radius: 10px;
-      text-decoration: none;
-      transition: background 0.3s ease;
-    }
-
-    .whatsapp-btn:hover {
-      background-color: #1ebc59;
-    }
-
-    #clickCount {
-      display: block;
-      margin-top: 10px;
-      font-weight: bold;
-      color: #333;
-    }
-
-    @media (max-width: 768px) {
-      .card-section h1 {
-        font-size: 24px;
-      }
-      .card-section p.designation,
-      .card-section p.description {
-        font-size: 14px;
-      }
-      .whatsapp-btn {
-        width: 80%;
-      }
-    }
-  </style>
+  @media (max-width:768px) {
+    .card-section h1 { font-size:24px; }
+    .card-section p { font-size:14px; }
+    .whatsapp-btn { width:80%; }
+  }
+</style>
 </head>
 <body>
 
-  <div class="container">
-    <!-- Video Section -->
-    <div class="video-section">
-      <video autoplay loop playsinline controls>
-        <source src="mla.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    </div>
-
-    <!-- Card Section -->
-    <div class="card-section">
-      <h1>Maddipati Venkata Raju</h1>
-      <p class="designation">MLA, Gopalapuram</p>
-      <p class="description">
-        గోపాలపురం నియాజకవర్గం శాసనసభ సభ్యులు “శ్రీ మద్దిపాటి వెంకటరాజు” గారి యొక్క రోజువారి కార్యక్రమాల వివరాల కొరకు ఈ చానల్ ఫొలొ అవ్వండి.
-      </p>
-      <a href="https://whatsapp.com/channel/0029Va4mSJAJuyAAh3qq1y38" 
-         target="_blank" 
-         class="whatsapp-btn" 
-         id="whatsappButton">
-        WhatsApp
-      </a>
-      <span id="clickCount">Clicks: 0</span>
-    </div>
+<div class="container">
+  <!-- Video Section -->
+  <div class="video-section">
+    <video autoplay loop playsinline controls>
+      <source src="mla.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
   </div>
 
-  <!-- CountAPI Tracking -->
-  <script>
-    const clickCounter = document.getElementById('clickCount');
+  <!-- Card Section -->
+  <div class="card-section">
+    <h1>Arimilli Radhakrishna</h1>
+    <p>MLA, Tanuku</p>
+    <p>మన తణుకు, మన ఆరిమిల్లి నియోజకవర్గం శాసనసభ సభ్యులు‎  యొక్క‎ రోజువారీ‎ కార్యక్రమాల‎ వివరాల‎ కొరకు ఈ‎ చానెల్ని‎ ఫాలో‎ అవ్వండి‎</p>
+    <a href="https://whatsapp.com/channel/0029VbAyyeSEFeXmPKE2Kd0L" target="_blank" class="whatsapp-btn" id="whatsappButton">WhatsApp</a>
+    <span id="clickCount">Clicks: 0</span>
+  </div>
+</div>
 
-    // Get current count on page load
-    fetch('https://api.countapi.xyz/get/mla-site/whatsapp-btn')
-      .then(res => res.json())
-      .then(data => clickCounter.textContent = 'Clicks: ' + data.value)
-      .catch(err => console.error(err));
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
 
-    // Increment counter on button click
-    document.getElementById('whatsappButton').addEventListener('click', function() {
-      fetch('https://api.countapi.xyz/hit/mla-site/whatsapp-btn')
-        .then(res => res.json())
-        .then(data => {
-          clickCounter.textContent = 'Clicks: ' + data.value;
-        })
-        .catch(err => console.error(err));
+<script>
+  // Initialize Firebase
+  const firebaseConfig = { 
+    databaseURL: "https://mla-site-default-rtdb.asia-southeast1.firebasedatabase.app" 
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  const clickCounter = document.getElementById('clickCount');
+  const button = document.getElementById('whatsappButton');
+
+  // Function to log clicks
+  button.addEventListener('click', () => {
+    const logRef = db.ref('clickLogs').push();
+    logRef.set({
+      ts: Date.now(),
+      path: window.location.pathname,
+      ua: navigator.userAgent,
+      ip: "unknown"
     });
-  </script>
+  });
+
+  // Function to update click count live
+  const countRef = db.ref('clickLogs');
+  countRef.on('value', snapshot => {
+    const data = snapshot.val();
+    clickCounter.textContent = 'Clicks: ' + (data ? Object.keys(data).length : 0);
+  });
+</script>
 
 </body>
 </html>
