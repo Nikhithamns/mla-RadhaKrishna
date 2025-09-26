@@ -5,61 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WhatsApp Button Dashboard</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 900px;
-      margin: 50px auto;
-      background: #fff;
-      padding: 20px 30px;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-    h1, h2 {
-      text-align: center;
-      color: #333;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    table th, table td {
-      padding: 10px;
-      border: 1px solid #ddd;
-      text-align: left;
-      font-size: 14px;
-    }
-    table th {
-      background-color: #25D366;
-      color: #fff;
-    }
-    .click-count {
-      font-size: 24px;
-      text-align: center;
-      margin-top: 10px;
-      color: #128C7E;
-      font-weight: bold;
-    }
-    .back-btn {
-      display: block;
-      width: fit-content;
-      margin: 20px auto 0;
-      padding: 10px 20px;
-      text-decoration: none;
-      color: #fff;
-      background-color: #25D366;
-      border-radius: 8px;
-      font-weight: bold;
-      text-align: center;
-    }
-    .back-btn:hover {
-      background-color: #128C7E;
-    }
+    body { font-family: Arial, sans-serif; background: #f5f5f5; margin:0; padding:0;}
+    .container { max-width: 900px; margin:50px auto; background:#fff; padding:20px 30px; border-radius:15px; box-shadow:0 4px 15px rgba(0,0,0,0.2);}
+    h1,h2 { text-align:center; color:#333;}
+    table { width:100%; border-collapse:collapse; margin-top:20px; }
+    table th, table td { padding:10px; border:1px solid #ddd; font-size:14px; text-align:left;}
+    table th { background-color:#25D366; color:#fff; }
+    .click-count { font-size:24px; text-align:center; margin-top:10px; color:#128C7E; font-weight:bold; }
+    .back-btn { display:block; width:fit-content; margin:20px auto 0; padding:10px 20px; text-decoration:none; color:#fff; background-color:#25D366; border-radius:8px; font-weight:bold; text-align:center; }
+    .back-btn:hover { background-color:#128C7E; }
   </style>
 </head>
 <body>
@@ -105,14 +59,11 @@
       const data = snapshot.val();
       if (!data) return;
 
-      // Convert object to array
       const logsArray = Object.values(data)
-        .sort((a, b) => b.ts - a.ts); // newest first
+        .sort((a,b) => b.ts - a.ts);
 
-      // Update total clicks
       totalClicksEl.textContent = logsArray.length;
 
-      // Populate table
       logsArray.forEach(log => {
         const tr = document.createElement('tr');
         const ts = log.ts ? new Date(log.ts).toLocaleString() : '-';
