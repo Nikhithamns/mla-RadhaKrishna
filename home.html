@@ -26,10 +26,10 @@
     .video-section {
       position: relative;
       width: 100%;
-      padding-bottom: 56.25%; /* 16:9 */
+      padding-bottom: 56.25%; /* 16:9 ratio */
       border-radius: 15px;
       overflow: hidden;
-      box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
     .video-section video {
       position: absolute;
@@ -44,7 +44,7 @@
       border-radius: 20px;
       padding: 20px 30px;
       text-align: center;
-      box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
     .card-section h1 {
       margin-bottom: 10px;
@@ -62,10 +62,11 @@
       background-color: #25D366;
       border-radius: 10px;
       text-decoration: none;
-      transition: background 0.3s;
+      transition: all 0.3s ease;
     }
     .whatsapp-btn:hover {
-      background-color: #1ebc59;
+      background-color: #128C7E;
+      transform: scale(1.05);
     }
     #clickCount {
       display: block;
@@ -73,100 +74,106 @@
       font-weight: bold;
       color: #333;
     }
+    @media (max-width: 768px) {
+      .card-section h1 { font-size: 24px; }
+      .card-section p { font-size: 14px; }
+      .whatsapp-btn { width: 80%; }
+    }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <!-- Video -->
-    <div class="video-section">
-      <video autoplay loop playsinline controls>
-        <source src="mla.mp4" type="video/mp4">
-        Your browser does not support video.
-      </video>
-    </div>
-
-    <!-- Info Card -->
-    <div class="card-section">
-      <h1>Arimilli Radhakrishna</h1>
-      <p class="designation">MLA, Tanuku</p>
-      <p>
-        మన తణుకు, మన ఆరిమిల్లి నియోజకవర్గం శాసనసభ సభ్యులు‎ యొక్క‎ రోజువారీ‎ కార్యక్రమాల‎ వివరాల‎ కొరకు ఈ‎ చానెల్ని‎ ఫాలో‎ అవ్వండి‎ 
-      </p>
-      <a href="https://whatsapp.com/channel/0029VbAyyeSEFeXmPKE2Kd0L"
-         target="_blank"
-         class="whatsapp-btn"
-         id="whatsappButton">
-        WhatsApp
-      </a>
-      <span id="clickCount">Clicks: 0</span>
-    </div>
+<div class="container">
+  <!-- Video Section -->
+  <div class="video-section">
+    <video autoplay loop playsinline controls>
+      <source src="mla.mp4" type="video/mp4">
+      Your browser does not support video.
+    </video>
   </div>
 
-  <!-- Firebase SDKs (compat for GitHub Pages) -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+  <!-- Card Section -->
+  <div class="card-section">
+    <h1>Arimilli Radhakrishna</h1>
+    <p class="designation">MLA, Tanuku</p>
+    <p>
+      మన తణుకు, మన ఆరిమిల్లి నియోజకవర్గం శాసనసభ సభ్యులు‎ యొక్క‎ రోజువారీ‎ కార్యక్రమాల‎ వివరాల‎ కొరకు ఈ‎ చానెల్ని‎ ఫాలో‎ అవ్వండి‎ 
+    </p>
+    <a href="https://whatsapp.com/channel/0029VbAyyeSEFeXmPKE2Kd0L"
+       target="_blank"
+       class="whatsapp-btn"
+       id="whatsappButton">
+      WhatsApp
+    </a>
+    <span id="clickCount">Clicks: 0</span>
+  </div>
+</div>
 
-  <script>
-    // 🔹 Your Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyAb_RH-NXtAAtIl7NKOXQzsNI1DsnNh9kc",
-      authDomain: "mla-site.firebaseapp.com",
-      databaseURL: "https://mla-site-default-rtdb.asia-southeast1.firebasedatabase.app/",
-      projectId: "mla-site",
-      storageBucket: "mla-site.appspot.com",
-      messagingSenderId: "277142733223",
-      appId: "1:277142733223:web:cb8ac83b5c9c31bf92f682"
-    };
+<!-- Firebase SDKs (CDN) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+<script>
+  // 🔹 Your Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyAb_RH-NXtAAtIl7NKOXQzsNI1DsnNh9kc",
+    authDomain: "mla-site.firebaseapp.com",
+    databaseURL: "https://mla-site-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "mla-site",
+    storageBucket: "mla-site.firebasestorage.app",
+    messagingSenderId: "277142733223",
+    appId: "1:277142733223:web:cb8ac83b5c9c31bf92f682",
+    measurementId: "G-HCWWL910XR"
+  };
 
-    const counterRef = db.ref("whatsapp-btn");
-    const logsRef = db.ref("clickLogs");
-    const clickCounter = document.getElementById("clickCount");
-    const whatsappButton = document.getElementById("whatsappButton");
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-    // Display counter in real-time
-    counterRef.on("value", snapshot => {
-      clickCounter.textContent = "Clicks: " + (snapshot.val() || 0);
-    });
+  const counterRef = db.ref("whatsapp-btn");
+  const logsRef = db.ref("clickLogs");
+  const clickCounter = document.getElementById("clickCount");
+  const whatsappButton = document.getElementById("whatsappButton");
 
-    // Hash function for IP (SHA-256)
-    async function hashIP(ip) {
-      const enc = new TextEncoder();
-      const data = enc.encode(ip);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-      return Array.from(new Uint8Array(hashBuffer))
-        .map(b => b.toString(16).padStart(2,'0')).join('');
+  // Display counter in real-time
+  counterRef.on("value", snapshot => {
+    clickCounter.textContent = "Clicks: " + (snapshot.val() || 0);
+  });
+
+  // Hash function for IP (SHA-256)
+  async function hashIP(ip) {
+    const enc = new TextEncoder();
+    const data = enc.encode(ip);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hashBuffer))
+      .map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  // On button click
+  whatsappButton.addEventListener("click", async () => {
+    // Increment counter
+    counterRef.transaction(current => (current || 0) + 1);
+
+    // Fetch public IP
+    let ip = "unknown";
+    try {
+      const res = await fetch("https://api.ipify.org?format=json");
+      const json = await res.json();
+      ip = await hashIP(json.ip); // store hashed IP
+    } catch (e) {
+      console.warn("IP fetch failed:", e);
     }
 
-    // On button click
-    whatsappButton.addEventListener("click", async () => {
-      // 1) Increment counter
-      counterRef.transaction(current => (current || 0) + 1);
-
-      // 2) Fetch public IP
-      let ip = "unknown";
-      try {
-        const res = await fetch("https://api.ipify.org?format=json");
-        const json = await res.json();
-        ip = await hashIP(json.ip); // store hashed IP
-      } catch (e) {
-        console.warn("IP fetch failed:", e);
-      }
-
-      // 3) Log details
-      const logEntry = {
-        ip,
-        ua: navigator.userAgent,
-        ts: Date.now(),
-        path: location.pathname
-      };
-      logsRef.push(logEntry).catch(console.error);
-    });
-  </script>
+    // Log details
+    const logEntry = {
+      ip,
+      ua: navigator.userAgent,
+      ts: Date.now(),
+      path: location.pathname
+    };
+    logsRef.push(logEntry).catch(console.error);
+  });
+</script>
 
 </body>
 </html>
