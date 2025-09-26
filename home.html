@@ -1,83 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Connect on WhatsApp</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      background: #f5f5f5;
-      min-height: 100vh;
-      margin: 0;
-    }
-    .card {
-      background: #fff;
-      padding: 20px 30px;
-      border-radius: 15px;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-    .whatsapp-btn {
-      display: inline-block;
-      padding: 12px 25px;
-      font-size: 18px;
-      font-weight: bold;
-      color: white;
-      background-color: #25D366;
-      border-radius: 10px;
-      text-decoration: none;
-      transition: all 0.3s;
-      margin-top: 15px;
-    }
-    .whatsapp-btn:hover {
-      transform: scale(1.05);
-      background-color: #128C7E;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connect on WhatsApp</title>
+<style>
+  body { font-family: Arial; display:flex; justify-content:center; align-items:center; height:100vh; margin:0; background:#f5f5f5; }
+  .card { text-align:center; background:#fff; padding:30px; border-radius:15px; box-shadow:0 4px 15px rgba(0,0,0,0.2); }
+  .whatsapp-btn { padding:12px 25px; background:#25D366; color:#fff; text-decoration:none; border-radius:10px; font-weight:bold; display:inline-block; margin-top:15px; transition:0.3s; }
+  .whatsapp-btn:hover { background:#128C7E; transform:scale(1.05); }
+</style>
 </head>
 <body>
 
-  <div class="card">
-    <h1>Arimilli Radhakrishna</h1>
-    <p>MLA, Tanuku</p>
-    <p>మన తణుకు, మన ఆరిమిల్లి నియోజకవర్గం శాసనసభ సభ్యులు‎  యొక్క‎ రోజువారీ‎ కార్యక్రమాల‎ వివరాల‎ కొరకు ఈ‎ చానెల్ని‎ ఫాలో‎ అవ్వండి‎</p>
+<div class="card">
+  <h1>Arimilli Radhakrishna</h1>
+  <p>MLA, Tanuku</p>
+  <p>మన తణుకు, మన ఆరిమిల్లి నియోజకవర్గం శాసనసభ సభ్యులు‎  యొక్క‎ రోజువారీ‎ కార్యక్రమాల‎ వివరాల‎ కొరకు ఈ‎ చానెల్ని‎ ఫాలో‎ అవ్వండి‎</p>
+  <a href="https://whatsapp.com/channel/0029VbAyyeSEFeXmPKE2Kd0L" target="_blank" id="whatsappButton" class="whatsapp-btn">WhatsApp</a>
+</div>
 
-    <a href="https://whatsapp.com/channel/0029VbAyyeSEFeXmPKE2Kd0L"
-       target="_blank"
-       class="whatsapp-btn"
-       id="whatsappButton">
-      WhatsApp
-    </a>
-  </div>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
+<script>
+  // Initialize Firebase
+  const firebaseConfig = { databaseURL: "https://mla-site-default-rtdb.asia-southeast1.firebasedatabase.app" };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-  <script>
-    // Initialize Firebase
-    const firebaseConfig = {
-      databaseURL: "https://mla-site-default-rtdb.asia-southeast1.firebasedatabase.app"
-    };
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    // Log click to Firebase
-    const btn = document.getElementById('whatsappButton');
-    btn.addEventListener('click', () => {
-      const logRef = db.ref('clickLogs').push();
-      logRef.set({
-        ts: Date.now(),
-        path: window.location.pathname,
-        ua: navigator.userAgent,
-        ip: "unknown" // or hash IP if available
-      });
+  // Log clicks to Firebase
+  document.getElementById('whatsappButton').addEventListener('click', () => {
+    const logRef = db.ref('clickLogs').push();
+    logRef.set({
+      ts: Date.now(),
+      path: window.location.pathname,
+      ua: navigator.userAgent,
+      ip: "unknown"
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>
