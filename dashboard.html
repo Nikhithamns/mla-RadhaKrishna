@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp Click Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    h1, h2 {
+      text-align: center;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table th, table td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+      font-size: 14px;
+    }
+    table th {
+      background-color: #25D366;
+      color: #fff;
+    }
+    .click-count {
+      font-size: 20px;
+      text-align: center;
+      margin-top: 20px;
+      color: #128C7E;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>WhatsApp Button Dashboard</h1>
+    <div class="click-count">Total Clicks: <span id="totalClicks">0</span></div>
+    
+    <h2>Recent Click Logs</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>Page</th>
+          <th>User Agent</th>
+        </tr>
+      </thead>
+      <tbody id="logsTable">
+        <!-- Click logs will appear here -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
+
+  <script>
+    // Your Firebase Realtime Database URL
+    const firebaseConfig = {
+      databaseURL: "https://mla-site-default-rtdb.asia-southeast1.firebasedatabase.app"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const totalClicksEl = document.getElementById('totalClicks');
+    const logsTable = document.getElementById('logsTable');
+
+    // Display total WhatsApp clicks
+    const clicksRef = db.ref('whatsapp-btn');
+    clicksRef.on('value', snapshot => {
+      const total = snapshot.val() || 0;
+      totalClicksEl.textContent = total;
+    });
+
+    // Display recent click logs
+    const logsRef = db.ref('clickLogs');
+    logsRef.on('value', snapshot => {
+      logsTable.innerHTML = ''; // clear table
+      const logs = snapshot.val();
+      if (logs) {
+        // Convert object to array and sort by timestamp descending
+        const logsArray = Object.values(logs).sort((a,b) => b.ts - a.ts);
+        logsArray.forEach(log => {
+          const tr = document.createElement('tr');
+          const ts = new Date(log.ts).toLocaleString();
+          tr.innerHTML = `
+            <td>${ts}</td>
+            <td>${log.path || '-'}</td>
+            <td>${log.ua || '-'}</td>
+          `;
+          logsTable.appendChild(tr);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
