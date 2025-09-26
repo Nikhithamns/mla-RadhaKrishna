@@ -74,6 +74,7 @@
           <th>Timestamp</th>
           <th>Page</th>
           <th>User Agent</th>
+          <th>IP (hashed)</th>
         </tr>
       </thead>
       <tbody id="logsTable">
@@ -89,49 +90,65 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
 
   <script>
-    // Firebase config
     const firebaseConfig = {
       databaseURL: "https://mla-site-default-rtdb.asia-southeast1.firebasedatabase.app"
     };
 
-    // Initialize Firebase
     const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
     const totalClicksEl = document.getElementById('totalClicks');
     const logsTable = document.getElementById('logsTable');
 
-    // Correct database references
+    // Reference correct nodes
     const clicksRef = db.ref('mla-RadhaKrishna/whatsapp-btn');
     const logsRef = db.ref('mla-RadhaKrishna/clickLogs');
 
-    // Show total clicks in real-time
+    // Update total clicks
     clicksRef.on('value', snapshot => {
       const total = snapshot.val() || 0;
       totalClicksEl.textContent = total;
     });
 
-    // Show recent click logs
+    // Helper to flatten nested objects
+    function flattenLogs(obj) {
+      let result = [];
+      for (const key in obj) {
+        if (obj[key] && typeof obj[key] === 'object' && !Array.isArray(obj[key]) && obj[key].ts) {
+          result.push(obj[key]);
+        } else if (typeof obj[key] === 'object') {
+          result = result.concat(flattenLogs(obj[key]));
+        }
+      }
+      return result;
+    }
+
+    // Display logs
     logsRef.on('value', snapshot => {
       logsTable.innerHTML = ''; // clear table
-      const logs = snapshot.val();
-      if (logs) {
-        const logsArray = Object.values(logs)
-          .sort((a,b) => b.ts - a.ts) // newest first
-          .slice(0, 20); // show latest 20
-        logsArray.forEach(log => {
-          const tr = document.createElement('tr');
-          const ts = log.ts ? new Date(log.ts).toLocaleString() : '-';
-          tr.innerHTML = `
-            <td>${ts}</td>
-            <td>${log.path || '-'}</td>
-            <td>${log.ua || '-'}</td>
-          `;
-          logsTable.appendChild(tr);
-        });
-      }
+      const data = snapshot.val();
+      if (!data) return;
+
+      const logsArray = flattenLogs(data)
+        .sort((a, b) => b.ts - a.ts)  // newest first
+        .slice(0, 50); // show latest 50 clicks
+
+      logsArray.forEach(log => {
+        const tr = document.createElement('tr');
+        const ts = log.ts ? new Date(log.ts).toLocaleString() : '-';
+        const path = log.path || '-';
+        const ua = (log.ua && typeof log.ua === 'object') ? JSON.stringify(log.ua) : (log.ua || '-');
+        const ip = (log.ip && typeof log.ip === 'object') ? JSON.stringify(log.ip) : (log.ip || '-');
+
+        tr.innerHTML = `
+          <td>${ts}</td>
+          <td>${path}</td>
+          <td>${ua}</td>
+          <td>${ip}</td>
+        `;
+        logsTable.appendChild(tr);
+      });
     });
   </script>
 </body>
 </html>
-
