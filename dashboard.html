@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WhatsApp Click Dashboard</title>
+  <title>WhatsApp Button Dashboard</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -45,6 +45,21 @@
       color: #128C7E;
       font-weight: bold;
     }
+    .back-btn {
+      display: block;
+      width: fit-content;
+      margin: 20px auto 0;
+      padding: 10px 20px;
+      text-decoration: none;
+      color: #fff;
+      background-color: #25D366;
+      border-radius: 8px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .back-btn:hover {
+      background-color: #128C7E;
+    }
   </style>
 </head>
 <body>
@@ -65,6 +80,8 @@
         <!-- Click logs will appear here -->
       </tbody>
     </table>
+
+    <a href="home.html" class="back-btn">Back to Home</a>
   </div>
 
   <!-- Firebase SDK -->
@@ -72,35 +89,39 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
 
   <script>
-    // Your Firebase Realtime Database URL
+    // Firebase config
     const firebaseConfig = {
       databaseURL: "https://mla-site-default-rtdb.asia-southeast1.firebasedatabase.app"
     };
 
+    // Initialize Firebase
     const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
     const totalClicksEl = document.getElementById('totalClicks');
     const logsTable = document.getElementById('logsTable');
 
-    // Display total WhatsApp clicks
-    const clicksRef = db.ref('whatsapp-btn');
+    // Correct database references
+    const clicksRef = db.ref('mla-RadhaKrishna/whatsapp-btn');
+    const logsRef = db.ref('mla-RadhaKrishna/clickLogs');
+
+    // Show total clicks in real-time
     clicksRef.on('value', snapshot => {
       const total = snapshot.val() || 0;
       totalClicksEl.textContent = total;
     });
 
-    // Display recent click logs
-    const logsRef = db.ref('clickLogs');
+    // Show recent click logs
     logsRef.on('value', snapshot => {
       logsTable.innerHTML = ''; // clear table
       const logs = snapshot.val();
       if (logs) {
-        // Convert object to array and sort by timestamp descending
-        const logsArray = Object.values(logs).sort((a,b) => b.ts - a.ts);
+        const logsArray = Object.values(logs)
+          .sort((a,b) => b.ts - a.ts) // newest first
+          .slice(0, 20); // show latest 20
         logsArray.forEach(log => {
           const tr = document.createElement('tr');
-          const ts = new Date(log.ts).toLocaleString();
+          const ts = log.ts ? new Date(log.ts).toLocaleString() : '-';
           tr.innerHTML = `
             <td>${ts}</td>
             <td>${log.path || '-'}</td>
@@ -113,3 +134,4 @@
   </script>
 </body>
 </html>
+
