@@ -100,36 +100,25 @@
 
     const logsRef = db.ref('clickLogs');
 
-    // Function to flatten nested logs
-    function flattenLogs(obj) {
-      let result = [];
-      for (const key in obj) {
-        if (obj[key] && typeof obj[key] === 'object' && obj[key].ts) {
-          result.push(obj[key]);
-        } else if (typeof obj[key] === 'object') {
-          result = result.concat(flattenLogs(obj[key]));
-        }
-      }
-      return result;
-    }
-
-    // Update logs and total clicks
     logsRef.on('value', snapshot => {
       logsTable.innerHTML = '';
       const data = snapshot.val();
       if (!data) return;
 
-      const logsArray = flattenLogs(data)
-        .sort((a,b) => b.ts - a.ts);  // newest first
+      // Convert object to array
+      const logsArray = Object.values(data)
+        .sort((a, b) => b.ts - a.ts); // newest first
 
+      // Update total clicks
       totalClicksEl.textContent = logsArray.length;
 
+      // Populate table
       logsArray.forEach(log => {
         const tr = document.createElement('tr');
         const ts = log.ts ? new Date(log.ts).toLocaleString() : '-';
         const path = log.path || '-';
-        const ua = (log.ua && typeof log.ua === 'object') ? JSON.stringify(log.ua) : (log.ua || '-');
-        const ip = (log.ip && typeof log.ip === 'object') ? JSON.stringify(log.ip) : (log.ip || '-');
+        const ua = log.ua?.Value || log.ua || '-';
+        const ip = log.ip?.Value || log.ip || '-';
 
         tr.innerHTML = `
           <td>${ts}</td>
